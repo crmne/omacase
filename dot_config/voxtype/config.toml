@@ -1,0 +1,18 @@
+engine = "whisper"
+state_file = "auto"
+[hotkey]
+enabled = false
+[audio]
+device = "default"
+sample_rate = 16000
+max_duration_secs = 600
+pause_media = false
+[whisper]
+model = "small.en"
+language = "en"
+mode = "local"
+[output]
+mode = "clipboard"
+fallback_to_clipboard = true
+[osd]
+enabled = false

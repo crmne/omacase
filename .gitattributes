@@ -1,0 +1,2 @@
+# A trailing tab represents an empty final field in generated TSV reports.
+*.tsv whitespace=-blank-at-eol

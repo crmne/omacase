@@ -1,0 +1,14 @@
+# Managed Omacase terminal defaults. Original configuration is backed up.
+font-family = JetBrainsMono Nerd Font
+font-size = 12
+theme = TokyoNight
+command = /opt/homebrew/bin/fish --login
+window-padding-x = 14
+window-padding-y = 14
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = no-cursor,ssh-env
+keybind = shift+insert=paste_from_clipboard
+keybind = control+insert=copy_to_clipboard
+keybind = shift+enter=csi:13;2u
+keybind = alt+shift+enter=csi:13;4u
