@@ -3,7 +3,7 @@
 **Mac + omakase**: an opinionated, Omarchy-inspired Mac setup for development
 and overnight agent work. Independent of DHH's Omamac and Omarchy.
 
-Fish, Starship, eza and modern CLI tools; Ghostty; OmniWM tiling;
+Fish with [OMAfish](https://github.com/crmne/omafish), Starship, eza and modern CLI tools; Ghostty; OmniWM tiling;
 Omarchy-style shortcuts through Hammerspoon; Herdr with Ctrl+Space;
 local Voxtype dictation; Raycast; and free menu-bar management with Thaw.
 

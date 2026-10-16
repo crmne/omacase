@@ -15,6 +15,7 @@ import uuid
 ROOT = Path(__file__).resolve().parent
 FILES = {
     "shell": {
+        "dot_config/fish/conf.d/00-omacase.fish": ".config/fish/conf.d/00-omacase.fish",
         "dot_config/fish/conf.d/zz-omarchy-mac.fish": ".config/fish/conf.d/zz-omarchy-mac.fish",
         "dot_config/omarchy-mac/starship.toml": ".config/omarchy-mac/starship.toml",
     },

@@ -86,6 +86,7 @@ class BootstrapTests(unittest.TestCase):
                  patch.object(sys, "argv", ["bootstrap.py", "--apply", "--no-activate"]), \
                  patch.object(bootstrap, "ensure_package", return_value="upgraded-or-current"), \
                  patch.object(bootstrap, "provision_voxtype", return_value=home / ".local/bin/voxtype"), \
+                 patch.object(bootstrap, "provision_omafish"), \
                  patch.object(bootstrap, "run", return_value=completed()):
                 self.assertEqual(bootstrap.main(), 0)
                 content = (home / ".config/herdr/config.toml").read_bytes()
@@ -97,6 +98,19 @@ class BootstrapTests(unittest.TestCase):
         with patch.object(sys, "argv", ["bootstrap.py"]), patch.object(bootstrap, "run") as run:
             self.assertEqual(bootstrap.main(), 0)
             run.assert_not_called()
+
+    def test_omafish_installs_and_updates_through_fisher(self):
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            with patch.object(bootstrap, "run", side_effect=[completed(), completed(out="crmne/omafish\n")]) as run:
+                bootstrap.provision_omafish(home, home)
+            self.assertEqual(run.call_args_list[0].args[0][-1], "fisher install crmne/omafish")
+
+    def test_omafish_missing_registration_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.object(bootstrap, "run", return_value=completed()):
+                with self.assertRaisesRegex(ValueError, "not registered"):
+                    bootstrap.provision_omafish(Path(directory), Path(directory))
 
 
 if __name__ == "__main__":

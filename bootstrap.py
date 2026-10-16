@@ -17,7 +17,7 @@ import uuid
 import setup
 
 FORMULAE = (
-    "fish", "starship", "eza", "zoxide", "fzf", "mise", "direnv", "bat",
+    "fish", "fisher", "starship", "eza", "zoxide", "fzf", "mise", "direnv", "bat",
     "ripgrep", "fd", "jq", "git", "git-lfs", "gh", "neovim", "tmux",
     "lazygit", "lazydocker", "btop", "lua", "herdr", "docker", "colima",
 )
@@ -71,6 +71,21 @@ def ensure_package(name, cask=False, app=None, backup=None):
         command.append("--force")
     run(command + [name])
     return "installed"
+
+
+def provision_omafish(home, backup):
+    """Fisher owns plugin files; preserve a recovery copy before updating."""
+    fish_config = home / ".config/fish"
+    if fish_config.is_symlink():
+        raise ValueError("Refusing symlinked Fish config; reconcile it before provisioning")
+    if fish_config.exists():
+        run(["/usr/bin/ditto", fish_config, backup / "fish-before-omafish"])
+    # install also updates an already registered plugin. Keep other plugins.
+    # Noninteractive Fish loads Fisher metadata without interactive init hooks.
+    run(["/opt/homebrew/bin/fish", "-c", "fisher install crmne/omafish"])
+    result = run(["/opt/homebrew/bin/fish", "-c", "fisher list"], capture=True)
+    if "crmne/omafish" not in result.stdout.splitlines():
+        raise ValueError("OMAfish was not registered by Fisher; review plugin conflicts")
 
 
 def provision_voxtype(home, backup):
@@ -185,6 +200,7 @@ def main():
         print("Formulae:", ", ".join(FORMULAE))
         print("Casks:", ", ".join(CASKS), "+ OS-appropriate Thaw")
         print("Also: verified Voxtype binary + small.en model; all bundled configuration.")
+        print("Also: install/update crmne/omafish through Homebrew Fisher.")
         print("Preview only. Use bootstrap.sh --apply to provision.")
         return 0
     if platform.system() != "Darwin" or platform.machine() != "arm64" or os.geteuid() == 0:
@@ -217,6 +233,7 @@ def main():
         if errors:
             print("Package errors (successful steps are reusable on rerun):\n" + "\n".join(errors))
             return 1
+        provision_omafish(home, backup)
         vox = provision_voxtype(home, backup)
         transaction = setup.install(home, setup.plan(home, list(setup.FILES)), replace=True)
         setup.atomic_write(backup / "config-transaction.json", json.dumps(transaction).encode())

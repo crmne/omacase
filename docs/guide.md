@@ -105,6 +105,16 @@ Homebrew installer and Voxtype release, and Voxtype's model download host.
 Colima can download a Linux VM image on first start. No telemetry is added by
 this project; installed applications have their own network behavior.
 
+The shell uses `crmne/omafish`, installed or updated through Homebrew's Fisher
+package. Its source is downloaded from GitHub on each bootstrap. Existing Fish
+configuration is backed up under `fish-before-omafish` before Fisher runs;
+other plugins stay registered. Fisher refuses unmanaged filename conflicts,
+which need manual reconciliation. Plugin updates are outside configuration
+transaction rollback. OMAfish owns mise, Starship and zoxide initialization;
+Omacase sets the prompt path before those hooks run. OMAfish's `cx` and `cy`
+shortcuts skip agent permission prompts; use the underlying agent commands
+when you want their normal approval behavior.
+
 ## Status
 
 Tested components on one Apple Silicon Mac running macOS 27: OmniWM 0.7.6,
