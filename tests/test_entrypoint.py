@@ -49,6 +49,11 @@ class EntrypointTests(unittest.TestCase):
         self.assertNotIn("--apply", result.stdout)
         self.assertIn("--no-activate", result.stdout)
 
+    def test_bare_preview_on_macos_bash(self):
+        result = self.invoke("--preview")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("--apply", result.stdout)
+
     def test_failed_download_does_not_bootstrap(self):
         result = self.invoke(fail=True)
         self.assertNotEqual(result.returncode, 0)

@@ -39,7 +39,7 @@ if [[ ! -f "$stage/source/bootstrap.sh" || ! -f "$stage/source/bootstrap.py" ]];
 fi
 # Keep stdin available for password prompts when this script is piped to bash.
 if ( : < /dev/tty ) 2>/dev/null; then
-  /bin/bash "$stage/source/bootstrap.sh" "${args[@]}" < /dev/tty
+  /bin/bash "$stage/source/bootstrap.sh" ${args[@]+"${args[@]}"} < /dev/tty
 else
-  /bin/bash "$stage/source/bootstrap.sh" "${args[@]}"
+  /bin/bash "$stage/source/bootstrap.sh" ${args[@]+"${args[@]}"}
 fi
